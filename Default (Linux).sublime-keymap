@@ -1,0 +1,12 @@
+// The first group of keys are permanent
+// The second group is temporary (while developing plugins)
+[
+	{ "keys": ["ctrl+super+c"], "command": "show_panel", "args": {"panel": "console"} },
+	{ "keys": ["ctrl+shift+t"], "command": "open_last_closed_file" },
+	{ "keys": ["super+c"], "command": "clone_file" },
+
+	{ "keys": ["super+j"], "command": "diff" },
+	{ "keys": ["super+h"], "command": "diff_add_file" },
+	{ "keys": ["ctrl+super+g", "ctrl+super+d"], "command": "git_diff" },
+	{ "keys": ["ctrl+super+g", "ctrl+super+s"], "command": "git_status" }
+]
