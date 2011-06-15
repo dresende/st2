@@ -5,7 +5,7 @@
 import sublime, sublime_plugin
 import os
 
-last_closed_file_path = sublime.packages_path() + "/st2/last_closed_files.path"
+last_closed_file_path = sublime.packages_path() + "/User/last_closed_files.path"
 last_closed_file_max = 50
 
 def get_history():
