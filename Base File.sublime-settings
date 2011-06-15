@@ -1,0 +1,11 @@
+{
+	"color_scheme": "Packages/Color Scheme - Default/Monokai Bright.tmTheme",
+	"fallback_encoding": "UTF-8",
+	"font_size": 9,
+	"rulers":
+	[
+		120
+	],
+	"scroll_past_end": false,
+	"word_separators": "./\\()\"'-_:,.;<>~!@#%^$&*|+=[]{}`~?"
+}
