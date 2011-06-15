@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Sublime Text
+GenericName=Sublime Text Editor
+Comment=Edit text files
+Exec=sublime_text %U
+Terminal=false
+Type=Application
+StartupNotify=true
+MimeType=text/plain;
+Icon=glade
+Categories=GNOME;GTK;Utility;TextEditor;
