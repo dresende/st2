@@ -1,5 +1,7 @@
 // Place user-specific overrides in this file, to ensure they're preserved
 // when upgrading
 {
-	"scroll_speed": 2.0
+	"scroll_speed": 2.0,
+	// maximum history items for last closed files
+	"last_closed_files_history": 20
 }

@@ -5,8 +5,13 @@
 import sublime, sublime_plugin
 import os
 
+global_settings = sublime.load_settings("Global.sublime-settings")
+
 last_closed_file_path = sublime.packages_path() + "/User/last_closed_files.path"
-last_closed_file_max = 50
+if global_settings.has("last_closed_files_history"):
+	last_closed_file_max = int(global_settings.get("last_closed_files_history"))
+else:
+	last_closed_file_max = 50
 
 def get_history():
 	if os.path.exists(last_closed_file_path):
