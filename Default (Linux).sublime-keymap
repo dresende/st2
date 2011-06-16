@@ -5,6 +5,7 @@
 	{ "keys": ["ctrl+shift+t"], "command": "open_last_closed_file" },
 	{ "keys": ["super+c"], "command": "clone_file" },
 	{ "keys": ["ctrl+shift+alt+p"], "command": "close_project" },
+	{ "keys": ["ctrl+shift+q"], "command": "toggle_quotes" },
 
 	{ "keys": ["super+j"], "command": "diff" },
 	{ "keys": ["super+h"], "command": "diff_add_file" },
