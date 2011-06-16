@@ -7,7 +7,7 @@ import os, subprocess
   Key binding: ["ctrl+super+g", "ctrl+super+d"]
   Command: "git_diff"
 '''
-class GitDiffCommand(sublime_plugin.WindowCommand):g
+class GitDiffCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		view = self.window.active_view()
 		if view.file_name() == None:
