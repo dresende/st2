@@ -65,6 +65,45 @@ class GitStatusCommand(sublime_plugin.WindowCommand):
 		output = "\n".join(map(str, output))
 		show_in_new_view(self.window, output, "(git status) " + status_title, "Diff")
 
+'''
+  Ask Git to show the log of the current active view repository
+
+  Key binding: ["ctrl+super+g", "ctrl+super+l"]
+  Command: "git_log"
+'''
+class GitLogCommand(sublime_plugin.WindowCommand):
+	def run(self):
+		view = self.window.active_view()
+		if view.file_name() == None:
+			return
+
+		status_title = get_git_remote_url(view.file_name())
+		if status_title == False:
+			status_title = os.path.basename(view.file_name())
+
+		p = subprocess.Popen([ "git", "log", "--no-color", "-30" ],
+							cwd = os.path.dirname(view.file_name()),
+							bufsize = 4096,
+							stdout = subprocess.PIPE,
+							stderr = subprocess.PIPE)
+		stdout, stderr = p.communicate()
+
+		output = stdout
+		if stderr != "":
+			output = stderr
+
+		output = output.splitlines()
+		for line in range(0, len(output)):
+			if output[line][0:7] == "commit ":
+				output[line] = "+++ Commit: " + output[line][7:].strip()
+			elif output[line][0:7] == "Author:":
+				output[line] = "+   Author: " + output[line][7:].strip()
+			elif output[line][0:5] == "Date:":
+				output[line] = "-     Date: " + output[line][5:].strip()
+
+		output = "\n".join(map(str, output))
+		show_in_new_view(self.window, output, "(git log) " + status_title, "Diff")
+
 class GitEvents(sublime_plugin.EventListener):
 	# when loading a file...
 	def on_load(self, view):
