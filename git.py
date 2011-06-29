@@ -109,8 +109,9 @@ class GitEvents(sublime_plugin.EventListener):
 	def on_load(self, view):
 		# show remote url if found on status bar
 		url = get_git_remote_url(view.file_name())
-		if url != False:
-			view.set_status("git-remote", url)
+		branch = get_git_branch(view.file_name())
+
+		view.set_status("git-info", url + " (" + branch + ")")
 
 # show some text in a new view
 def show_in_new_view(window, text, name, syntax = None):
@@ -137,3 +138,19 @@ def get_git_remote_url(path):
 		return stdout.strip()
 
 	return False
+
+# get the git branch for a given path
+def get_git_branch(path):
+	p = subprocess.Popen([ "git", "branch", "--no-color" ],
+							cwd = os.path.dirname(path),
+							bufsize = 4096,
+							stdout = subprocess.PIPE,
+							stderr = subprocess.PIPE)
+	stdout, stderr = p.communicate()
+	stdout = stdout.splitlines()
+
+	for line in stdout:
+		if line[0:2] == "* ":
+			return line[2:].strip()
+
+	return "?"
