@@ -4,6 +4,32 @@ import time
 from threading import Timer
 
 '''
+  Show git command in a quick panel
+
+  Key binding: ["ctrl+super+g"]
+  Command: "git_commands"
+'''
+class GitCommandsCommand(sublime_plugin.WindowCommand):
+	commands = {
+		"git_log"   : "Show log",
+		"git_diff"  : "Show stage diff",
+		"git_status": "Show stage status",
+		"git_commit": "Add current file and commit stage"
+	}
+	def run(self):
+		self.window.show_quick_panel(self.commands.values(), self.runCommand)
+	
+	def runCommand(self, index):
+		if index == -1:
+			return
+		
+		i = 0
+		for k in self.commands:
+			if i == index:
+				return self.window.run_command(k)
+			i += 1
+
+'''
   Ask Git to show a diff of the current active view (it will save the file first)
 
   Key binding: ["ctrl+super+g", "ctrl+super+d"]
