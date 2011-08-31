@@ -5,9 +5,12 @@
 	{ "keys": ["ctrl+shift+t"], "command": "open_last_closed_file" },
 	{ "keys": ["super+c"], "command": "clone_file" },
 	{ "keys": ["ctrl+shift+alt+p"], "command": "close_project" },
-	{ "keys": ["ctrl+shift+q"], "command": "toggle_quotes" },
-
 	{ "keys": ["ctrl+super+d"], "command": "diff_add_file" },
 	{ "keys": ["ctrl+super+g"], "command": "git_commands" },
-	{ "keys": ["ctrl+super+l"], "command": "lint" }
+	{ "keys": ["ctrl+super+l"], "command": "lint" },
+	// author: dom111
+	{ "keys": ["ctrl+shift+q"], "command": "toggle_quotes" },
+	// author: rmaksim
+	{ "keys": ["alt+up"],  "command": "inc_dec_number", "args": { "delta": 1 } },
+	{ "keys": ["alt+down"], "command": "inc_dec_number", "args": { "delta": -1 } }
 ]
