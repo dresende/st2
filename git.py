@@ -29,6 +29,51 @@ class GitDiffCommand(sublime_plugin.WindowCommand):
 		show_in_new_view(self.window, output, "(git diff) " + os.path.basename(view.file_name()), "Diff")
 
 '''
+  Add current file to stage and commit
+
+  Key binding: ["ctrl+super+g", "ctrl+super+c"]
+  Command: "git_commit"
+'''
+class GitCommitCommand(sublime_plugin.WindowCommand):
+	def run(self):
+		view = self.window.active_view()
+		if view.file_name() == None:
+			return
+
+		view.run_command("save")
+		view.window().show_input_panel("Message:", "", self.onCommitDone, None, None)
+
+	def onCommitDone(self, msg):
+		view = self.window.active_view()
+		view.set_status("git-commit", "Adding '" + os.path.basename(view.file_name()) + "'")
+
+		p = subprocess.Popen([ "git", "add", view.file_name() ],
+							cwd = os.path.dirname(view.file_name()),
+							bufsize = 4096,
+							stdout = subprocess.PIPE,
+							stderr = subprocess.PIPE)
+		stdout, stderr = p.communicate()
+
+		if len(stderr) > 0:
+			view.set_status("git-commit", "Error adding file...")
+			return
+		
+		view.set_status("git-commit", "Commiting...")
+
+		p = subprocess.Popen([ "git", "commit", "-m", msg ],
+							cwd = os.path.dirname(view.file_name()),
+							bufsize = 4096,
+							stdout = subprocess.PIPE,
+							stderr = subprocess.PIPE)
+		stdout, stderr = p.communicate()
+
+		if len(stderr) > 0:
+			view.set_status("git-commit", "Error commiting...")
+			return
+
+		view.set_status("git-commit", "Done")
+
+'''
   Ask Git to show the status of the current active view repository
 
   Key binding: ["ctrl+super+g", "ctrl+super+s"]
