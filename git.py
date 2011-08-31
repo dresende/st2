@@ -1,6 +1,7 @@
 import sublime, sublime_plugin
 import os, subprocess
-import sched, time
+import time
+from threading import Timer
 
 '''
   Ask Git to show a diff of the current active view (it will save the file first)
@@ -45,44 +46,48 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 		view.window().show_input_panel("Message:", "", self.onCommitDone, None, None)
 
 	def onCommitDone(self, msg):
-		s = sched.scheduler(time.time, time.sleep)
+		if len(msg) == 0:
+			return
 
-		view = self.window.active_view()
-		view.set_status("git-commit", "Adding '" + os.path.basename(view.file_name()) + "'")
+		filename = self.window.active_view().file_name()
 
-		p = subprocess.Popen([ "git", "add", view.file_name() ],
-							cwd = os.path.dirname(view.file_name()),
+		self.setFinalCommitStatus("Adding '" + os.path.basename(filename) + "'")
+
+		p = subprocess.Popen([ "git", "add", filename ],
+							cwd = os.path.dirname(filename),
 							bufsize = 4096,
 							stdout = subprocess.PIPE,
 							stderr = subprocess.PIPE)
 		stdout, stderr = p.communicate()
 
 		if len(stderr) > 0:
-			view.set_status("git-commit", "Error adding file...")
-			s.enter(5, 1, self.clearCommitStatus, ())
 			print stderr
-			return
+			return self.setFinalCommitStatus("Error adding file...")
 		
-		view.set_status("git-commit", "Commiting...")
+		self.setCommitStatus("Committing '" + msg + "'")
 
 		p = subprocess.Popen([ "git", "commit", "-m", msg ],
-							cwd = os.path.dirname(view.file_name()),
+							cwd = os.path.dirname(filename),
 							bufsize = 4096,
 							stdout = subprocess.PIPE,
 							stderr = subprocess.PIPE)
 		stdout, stderr = p.communicate()
 
 		if len(stderr) > 0:
-			view.set_status("git-commit", "Error commiting...")
-			s.enter(5, 1, self.clearCommitStatus, ())
 			print stderr
-			return
+			return self.setFinalCommitStatus("Error committing...")
 
-		view.set_status("git-commit", "Committed")
-		s.enter(5, 1, self.clearCommitStatus, ())
+		self.setFinalCommitStatus("Committed")
+
+	def setCommitStatus(self, msg):
+		self.window.active_view().set_status("git-commit", msg)
+
+	def setFinalCommitStatus(self, msg):
+		self.window.active_view().set_status("git-commit", msg)
+		Timer(3, self.clearCommitStatus, ()).start()
 
 	def clearCommitStatus(self):
-		self.window.active_view().set_status("git-commit", None)
+		self.window.active_view().erase_status("git-commit")
 
 '''
   Ask Git to show the status of the current active view repository
