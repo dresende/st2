@@ -14,7 +14,8 @@ class GitCommandsCommand(sublime_plugin.WindowCommand):
 		"git_log"   : "Show log",
 		"git_diff"  : "Show stage diff",
 		"git_status": "Show stage status",
-		"git_commit": "Add current file and commit stage"
+		"git_commit": "Add current file and commit stage",
+		"git_push"  : "Push master to remote origin"
 	}
 	def run(self):
 		self.window.show_quick_panel(self.commands.values(), self.runCommand)
@@ -75,7 +76,8 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 		if len(msg) == 0:
 			return
 
-		filename = self.window.active_view().file_name()
+		self.view = self.window.active_view()
+		filename = self.view.file_name()
 
 		self.setFinalCommitStatus("Adding '" + os.path.basename(filename) + "'")
 
@@ -106,14 +108,56 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 		self.setFinalCommitStatus("Committed")
 
 	def setCommitStatus(self, msg):
-		self.window.active_view().set_status("git-commit", msg)
+		self.view.set_status("git-status", msg)
 
 	def setFinalCommitStatus(self, msg):
-		self.window.active_view().set_status("git-commit", msg)
+		self.view.set_status("git-status", msg)
 		Timer(3, self.clearCommitStatus, ()).start()
 
 	def clearCommitStatus(self):
-		self.window.active_view().erase_status("git-commit")
+		self.view.erase_status("git-status")
+
+'''
+  Push master to origin
+
+  Key binding: ["ctrl+super+g", "ctrl+super+p"]
+  Command: "git_push"
+'''
+class GitPushCommand(sublime_plugin.WindowCommand):
+	def run(self):
+		self.view = self.window.active_view()
+		self.filename = self.view.file_name()
+		if self.filename == None:
+			return
+
+		self.setPushStatus("Pushing...")
+		Timer(1, self.gitPush, ()).start()
+	
+	def gitPush(self):
+		p = subprocess.Popen([ "git", "push", "origin", "master" ],
+							cwd = os.path.dirname(self.filename),
+							bufsize = 4096,
+							stdout = subprocess.PIPE,
+							stderr = subprocess.PIPE)
+		stdout, stderr = p.communicate()
+
+		if len(stderr) > 0:
+			print stderr
+			return self.setFinalPushStatus("Error pushing...")
+
+		self.setFinalPushStatus("Pushed")
+		print stdout
+
+	def setPushStatus(self, msg):
+		print msg
+		self.view.set_status("git-status", msg)
+
+	def setFinalPushStatus(self, msg):
+		self.view.set_status("git-status", msg)
+		Timer(3, self.clearPushStatus, ()).start()
+
+	def clearPushStatus(self):
+		self.view.erase_status("git-status")
 
 '''
   Ask Git to show the status of the current active view repository
@@ -198,7 +242,8 @@ class GitEvents(sublime_plugin.EventListener):
 		url = get_git_remote_url(view.file_name())
 		branch = get_git_branch(view.file_name())
 
-		view.set_status("git-info", url + " (" + branch + ")")
+		# zinfo is just to put this info after the other git status messages
+		view.set_status("git-zinfo", url + " (" + branch + ")")
 
 # show some text in a new view
 def show_in_new_view(window, text, name, syntax = None):
