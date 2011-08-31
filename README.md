@@ -17,6 +17,7 @@ This is not a git integration, this plugin will just be a couple of tweaks to ma
 life easier. For instance, it displays the remote git repository on the status bar when
 you have a git file opened, it will show you a colored diff of the changes of your file
 from the last commit and will show you also a colored status of the current repository.
+You better check the key bindings and look at the code..
 
 ### Diff
 
