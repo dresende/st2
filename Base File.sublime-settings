@@ -4,8 +4,10 @@
 	"font_size": 9,
 	"rulers":
 	[
-		120
+		110
 	],
 	"scroll_past_end": false,
-	"word_separators": "./\\()\"'-_:,.;<>~!@#%^$&*|+=[]{}`~?"
+	"word_separators": "./\\()\"'-_:,.;<>~!@#%^$&*|+=[]{}`~?",
+	"word_wrap": true,
+	"wrap_width": 110
 }
