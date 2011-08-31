@@ -8,9 +8,6 @@
 	{ "keys": ["ctrl+shift+q"], "command": "toggle_quotes" },
 
 	{ "keys": ["ctrl+super+d"], "command": "diff_add_file" },
-	{ "keys": ["ctrl+super+g", "ctrl+super+d"], "command": "git_diff" },
-	{ "keys": ["ctrl+super+g", "ctrl+super+s"], "command": "git_status" },
-	{ "keys": ["ctrl+super+g", "ctrl+super+l"], "command": "git_log" },
-	{ "keys": ["ctrl+super+g", "ctrl+super+c"], "command": "git_commit" },
+	{ "keys": ["ctrl+super+g"], "command": "git_commands" },
 	{ "keys": ["ctrl+super+l"], "command": "lint" }
 ]
