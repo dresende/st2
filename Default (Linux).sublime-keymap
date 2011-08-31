@@ -7,8 +7,7 @@
 	{ "keys": ["ctrl+shift+alt+p"], "command": "close_project" },
 	{ "keys": ["ctrl+shift+q"], "command": "toggle_quotes" },
 
-	{ "keys": ["super+j"], "command": "diff" },
-	{ "keys": ["super+h"], "command": "diff_add_file" },
+	{ "keys": ["ctrl+super+d"], "command": "diff_add_file" },
 	{ "keys": ["ctrl+super+g", "ctrl+super+d"], "command": "git_diff" },
 	{ "keys": ["ctrl+super+g", "ctrl+super+s"], "command": "git_status" },
 	{ "keys": ["ctrl+super+g", "ctrl+super+l"], "command": "git_log" },
