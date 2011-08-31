@@ -1,7 +1,11 @@
 // Place user-specific overrides in this file, to ensure they're preserved
 // when upgrading
 {
+	"theme": "Soda Dark.sublime-theme",
 	"scroll_speed": 2.0,
 	// maximum history items for last closed files
-	"last_closed_files_history": 20
+	"remember_open_files": false,
+	"last_closed_files_history": 20,
+
+	"ignored_packages": []
 }
