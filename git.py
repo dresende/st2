@@ -141,15 +141,22 @@ class GitPushCommand(sublime_plugin.WindowCommand):
 							stderr = subprocess.PIPE)
 		stdout, stderr = p.communicate()
 
-		if len(stderr) > 0:
-			print stderr
-			return self.setFinalPushStatus("Error pushing...")
+		output = stdout
+		if stderr != "":
+			output = stderr
+		output = output.splitlines()
 
-		self.setFinalPushStatus("Pushed")
-		print stdout
+		# this is very bad... but it works!
+		if len(output) == 0:
+			return self.setFinalPushStatus("Error pushing")
+
+		if output[0] == "Everything up-to-date":
+			return self.setFinalPushStatus("Push is up-to-date")
+		
+		return self.setFinalPushStatus("Pushed:" + output[1])
+		print output
 
 	def setPushStatus(self, msg):
-		print msg
 		self.view.set_status("git-status", msg)
 
 	def setFinalPushStatus(self, msg):
