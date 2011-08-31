@@ -1,5 +1,6 @@
 import sublime, sublime_plugin
 import os, subprocess
+import sched, time
 
 '''
   Ask Git to show a diff of the current active view (it will save the file first)
@@ -44,6 +45,8 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 		view.window().show_input_panel("Message:", "", self.onCommitDone, None, None)
 
 	def onCommitDone(self, msg):
+		s = sched.scheduler(time.time, time.sleep)
+
 		view = self.window.active_view()
 		view.set_status("git-commit", "Adding '" + os.path.basename(view.file_name()) + "'")
 
@@ -56,6 +59,7 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 
 		if len(stderr) > 0:
 			view.set_status("git-commit", "Error adding file...")
+			s.enter(5, 1, self.clearCommitStatus, ())
 			print stderr
 			return
 		
@@ -70,10 +74,15 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 
 		if len(stderr) > 0:
 			view.set_status("git-commit", "Error commiting...")
+			s.enter(5, 1, self.clearCommitStatus, ())
 			print stderr
 			return
 
-		view.set_status("git-commit", "Done")
+		view.set_status("git-commit", "Committed")
+		s.enter(5, 1, self.clearCommitStatus, ())
+
+	def clearCommitStatus(self):
+		self.window.active_view().set_status("git-commit", None)
 
 '''
   Ask Git to show the status of the current active view repository
