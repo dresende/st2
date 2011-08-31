@@ -56,6 +56,7 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 
 		if len(stderr) > 0:
 			view.set_status("git-commit", "Error adding file...")
+			print stderr
 			return
 		
 		view.set_status("git-commit", "Commiting...")
@@ -69,6 +70,7 @@ class GitCommitCommand(sublime_plugin.WindowCommand):
 
 		if len(stderr) > 0:
 			view.set_status("git-commit", "Error commiting...")
+			print stderr
 			return
 
 		view.set_status("git-commit", "Done")
