@@ -8,6 +8,7 @@
 	{ "keys": ["ctrl+super+d"], "command": "diff_add_file" },
 	{ "keys": ["ctrl+super+g"], "command": "git_commands" },
 	{ "keys": ["ctrl+super+l"], "command": "lint" },
+	{ "keys": ["ctrl+shift+g"], "command": "gist" },
 	// author: dom111
 	{ "keys": ["ctrl+shift+q"], "command": "toggle_quotes" },
 	// author: rmaksim
